@@ -178,7 +178,7 @@ export default class DndManager {
         const dropTargetNode = monitor.getItem().node;
         const draggedNode = props.node;
 
-        return draggedNode === dropTargetNode;
+        var result = draggedNode === dropTargetNode;
       },
     };
 
@@ -228,7 +228,8 @@ export default class DndManager {
           // Or hovered above the same node but at a different depth
           targetDepth !== dropTargetProps.path.length - 1;
 
-        if (!needsRedraw) {
+        // we wont allow dropping on outermost layer so return if targetDepth is not bigger than 0
+        if (!needsRedraw || targetDepth <= 0) {
           return;
         }
 
@@ -238,6 +239,7 @@ export default class DndManager {
           this.dragHover({
             node: draggedNode,
             path: monitor.getItem().path,
+            dropPath: dropTargetProps.path,
             minimumTreeIndex: dropTargetProps.listIndex,
             depth: targetDepth,
           });

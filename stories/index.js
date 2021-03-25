@@ -20,7 +20,7 @@ import ThemesExample from './themes';
 import TouchSupportExample from './touch-support';
 import TreeDataIOExample from './tree-data-io';
 import TreeToTreeExample from './tree-to-tree';
-
+import Custom from './custom';
 storiesOf('Basics', module)
   .add('Minimal implementation', () => <BarebonesExample />)
   .add('treeData import/export', () => <TreeDataIOExample />)
@@ -30,7 +30,8 @@ storiesOf('Basics', module)
   .add('Search', () => <SearchExample />)
   .add('Themes', () => <ThemesExample />)
   .add('Callbacks', () => <CallbacksExample />)
-  .add('Row direction support', () => <RowDirectionExample />);
+  .add('Row direction support', () => <RowDirectionExample />)
+  .add('Custom', () => <Custom />);
 
 storiesOf('Advanced', module)
   .add('Drag from external source', () => <ExternalNodeExample />)

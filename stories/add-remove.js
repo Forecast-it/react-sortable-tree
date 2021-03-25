@@ -1,3 +1,4 @@
+import { node } from 'prop-types';
 import React, { Component } from 'react';
 import SortableTree, { addNodeUnderParent, removeNodeAtPath } from '../src';
 // In your own app, you would need to use import styles once in the app
@@ -59,7 +60,10 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      treeData: [{ title: 'Peter Olofsson' }, { title: 'Karl Johansson' }],
+      treeData: [
+        { title: 'Peter Olofsson', type: 'top' },
+        { title: 'Karl Johansson', type: 'top' },
+      ],
       addAsFirstChild: false,
     };
   }
@@ -74,6 +78,9 @@ export default class App extends Component {
           <SortableTree
             treeData={this.state.treeData}
             onChange={treeData => this.setState({ treeData })}
+            canDrop={(nextParent, node) =>
+              nextParent.type === 'top' && nextParent.title !== node.title
+            }
             generateNodeProps={({ node, path }) => ({
               buttons: [
                 <button
@@ -113,18 +120,6 @@ export default class App extends Component {
             })}
           />
         </div>
-
-        <button
-          onClick={() =>
-            this.setState(state => ({
-              treeData: state.treeData.concat({
-                title: `${getRandomName()} ${getRandomName()}sson`,
-              }),
-            }))
-          }
-        >
-          Add more
-        </button>
         <br />
         <label htmlFor="addAsFirstChild">
           Add new nodes at start
