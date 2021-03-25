@@ -74,6 +74,7 @@ export default class App extends Component {
           <SortableTree
             treeData={this.state.treeData}
             onChange={treeData => this.setState({ treeData })}
+            onTopRowRender={row => console.log(row)}
             generateNodeProps={({ node, path }) => ({
               buttons: [
                 <button

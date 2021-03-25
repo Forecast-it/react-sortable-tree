@@ -194,8 +194,8 @@ class ReactSortableTree extends Component {
 
     instanceProps.searchQuery = nextProps.searchQuery;
     instanceProps.searchFocusOffset = nextProps.searchFocusOffset;
-    newState.instanceProps = {...instanceProps, ...newState.instanceProps };
- 
+    newState.instanceProps = { ...instanceProps, ...newState.instanceProps };
+
     return newState;
   }
 
@@ -729,6 +729,11 @@ class ReactSortableTree extends Component {
                   swapLength,
                 })
               }
+              onRowsRendered={({ startIndex }) => {
+                if (this.props.onTopRowRender) {
+                  this.props.onTopRowRender(rows[startIndex].node);
+                }
+              }}
               {...reactVirtualizedListProps}
             />
           )}
