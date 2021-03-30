@@ -1,6 +1,6 @@
 {
   "name": "@forecasthq/react-virtualized-nested-dnd",
-  "version": "2.8.2",
+  "version": "2.8.19",
   "description": "Drag-and-drop sortable component for nested data and hierarchies modifed for special use",
   "scripts": {
     "prebuild": "yarn run lint && yarn run clean",
