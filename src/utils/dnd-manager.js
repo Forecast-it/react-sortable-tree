@@ -228,7 +228,7 @@ export default class DndManager {
           // Or hovered above the same node but at a different depth
           targetDepth !== dropTargetProps.path.length - 1;
 
-        if (!needsRedraw) {
+        if (!needsRedraw || targetDepth <= 0) {
           return;
         }
 
