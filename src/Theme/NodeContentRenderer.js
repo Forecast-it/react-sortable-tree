@@ -181,7 +181,7 @@ export class NodeContentRenderer extends Component {
       className,
       style,
       didDrop,
-      lowerSiblingCounts,
+      lowerSiblingCounts = [],
       listIndex,
       swapFrom,
       swapLength,
@@ -253,6 +253,7 @@ export class NodeContentRenderer extends Component {
           height: '100%',
           width: '130%',
           display: 'flex',
+          opacity: isDragging ? 0.2 : 1,
         }}
         {...otherProps}
       >
