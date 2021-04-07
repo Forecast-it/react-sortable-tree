@@ -907,6 +907,9 @@ ReactSortableTree.propTypes = {
 
   // rtl support
   rowDirection: PropTypes.string,
+
+  // how far up the tree dropping is allowed
+  minimumDropDepth: PropTypes.number,
 };
 
 ReactSortableTree.defaultProps = {
@@ -939,6 +942,7 @@ ReactSortableTree.defaultProps = {
   onDragStateChanged: () => {},
   onlyExpandSearchedNodes: false,
   rowDirection: 'ltr',
+  minimumDropDepth: 0,
 };
 
 polyfill(ReactSortableTree);

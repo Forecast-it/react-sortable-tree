@@ -36,6 +36,9 @@ export default class DndManager {
     return this.treeRef.state.draggingTreeData || this.treeRef.props.treeData;
   }
 
+  get minimumDropDepth() {
+    return this.treeRef.props.minimumDropDepth;
+  }
   get getNodeKey() {
     return this.treeRef.props.getNodeKey;
   }
@@ -201,18 +204,23 @@ export default class DndManager {
   wrapTarget(el) {
     const nodeDropTarget = {
       drop: (dropTargetProps, monitor, component) => {
+        const depth = this.getTargetDepth(dropTargetProps, monitor, component);
+        if (depth < this.minimumDropDepth) {
+          console.log('no drop result');
+          return null;
+        }
         const result = {
           node: monitor.getItem().node,
           path: monitor.getItem().path,
           treeIndex: monitor.getItem().treeIndex,
           treeId: this.treeId,
           minimumTreeIndex: dropTargetProps.treeIndex,
-          depth: this.getTargetDepth(dropTargetProps, monitor, component),
+          depth,
         };
 
         this.drop(result);
 
-        return result;
+        return { ...result, myMessage: 'HEJ HEEEJ' };
       },
 
       hover: (dropTargetProps, monitor, component) => {
@@ -228,7 +236,8 @@ export default class DndManager {
           // Or hovered above the same node but at a different depth
           targetDepth !== dropTargetProps.path.length - 1;
 
-        if (!needsRedraw || targetDepth <= 0) {
+        // tagetdepth less or equal 0 means that we are on top level, and we do not allow dropping there, so we return
+        if (!needsRedraw || targetDepth < this.minimumDropDepth) {
           return;
         }
 

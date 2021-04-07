@@ -72,6 +72,7 @@ export default class App extends Component {
       <div>
         <div style={{ height: 300 }}>
           <SortableTree
+            minimumDropDepth={1}
             treeData={this.state.treeData}
             onChange={treeData => this.setState({ treeData })}
             onTopRowRender={row => console.log(row)}
