@@ -35,7 +35,7 @@ class NodeRendererDefault extends Component {
     const nodeTitle = title || node.title;
     const nodeSubtitle = subtitle || node.subtitle;
     const rowDirectionClass = rowDirection === 'rtl' ? 'rst__rtl' : null;
-
+    console.log(otherProps);
     let handle;
     if (canDrag) {
       if (typeof node.children === 'function' && node.expanded) {

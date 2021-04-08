@@ -207,7 +207,7 @@ export default class DndManager {
         const depth = this.getTargetDepth(dropTargetProps, monitor, component);
         if (depth < this.minimumDropDepth) {
           console.log('no drop result');
-          return null;
+          return;
         }
         const result = {
           node: monitor.getItem().node,
@@ -237,10 +237,13 @@ export default class DndManager {
           targetDepth !== dropTargetProps.path.length - 1;
 
         // tagetdepth less or equal 0 means that we are on top level, and we do not allow dropping there, so we return
-        if (!needsRedraw || targetDepth < this.minimumDropDepth) {
+        if (!needsRedraw) {
           return;
         }
 
+        if (targetDepth < this.minimumDropDepth) {
+          return;
+        }
         // throttle `dragHover` work to available animation frames
         cancelAnimationFrame(this.rafId);
         this.rafId = requestAnimationFrame(() => {

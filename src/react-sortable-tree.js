@@ -31,6 +31,7 @@ import {
 import {
   changeNodeAtPath,
   find,
+  getVisibleNodeInfoAtIndex,
   insertNode,
   removeNode,
   toggleExpandedForAll,
@@ -391,6 +392,9 @@ class ReactSortableTree extends Component {
       return;
     }
 
+    if (draggedDepth < this.props.minimumDropDepth) {
+      return;
+    }
     this.setState(({ draggingTreeData, instanceProps }) => {
       // Fall back to the tree data if something is being dragged in from
       //  an external element
@@ -407,7 +411,6 @@ class ReactSortableTree extends Component {
 
       const rows = this.getRows(addedResult.treeData);
       const expandedParentPath = rows[addedResult.treeIndex].path;
-
       return {
         draggedNode,
         draggedDepth,
@@ -415,7 +418,13 @@ class ReactSortableTree extends Component {
         draggingTreeData: changeNodeAtPath({
           treeData: newDraggingTreeData,
           path: expandedParentPath.slice(0, -1),
-          newNode: ({ node }) => ({ ...node, expanded: true }),
+          newNode: ({ node }) => ({
+            ...node,
+            expanded:
+              draggedDepth >= this.props.minimumDropDepth
+                ? true
+                : node.expanded,
+          }),
           getNodeKey: this.props.getNodeKey,
         }),
         // reset the scroll focus so it doesn't jump back
@@ -428,7 +437,6 @@ class ReactSortableTree extends Component {
 
   endDrag(dropResult) {
     const { instanceProps } = this.state;
-
     const resetTree = () =>
       this.setState({
         draggingTreeData: null,
@@ -439,7 +447,7 @@ class ReactSortableTree extends Component {
       });
 
     // Drop was cancelled
-    if (!dropResult) {
+    if (!dropResult || !dropResult.node) {
       resetTree();
     } else if (dropResult.treeId !== this.treeId) {
       // The node was dropped in an external drop target or tree
@@ -642,7 +650,7 @@ class ReactSortableTree extends Component {
         newNode: draggedNode,
         depth: draggedDepth,
         minimumTreeIndex: draggedMinimumTreeIndex,
-        expandParent: true,
+        expandParent: false,
         getNodeKey,
       });
 
