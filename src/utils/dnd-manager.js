@@ -39,6 +39,7 @@ export default class DndManager {
   get minimumDropDepth() {
     return this.treeRef.props.minimumDropDepth;
   }
+
   get getNodeKey() {
     return this.treeRef.props.getNodeKey;
   }
@@ -206,8 +207,7 @@ export default class DndManager {
       drop: (dropTargetProps, monitor, component) => {
         const depth = this.getTargetDepth(dropTargetProps, monitor, component);
         if (depth < this.minimumDropDepth) {
-          console.log('no drop result');
-          return;
+          return undefined;
         }
         const result = {
           node: monitor.getItem().node,

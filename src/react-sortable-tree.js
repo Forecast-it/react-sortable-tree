@@ -31,7 +31,6 @@ import {
 import {
   changeNodeAtPath,
   find,
-  getVisibleNodeInfoAtIndex,
   insertNode,
   removeNode,
   toggleExpandedForAll,
