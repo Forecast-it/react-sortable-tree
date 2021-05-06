@@ -649,7 +649,7 @@ class ReactSortableTree extends Component {
         newNode: draggedNode,
         depth: draggedDepth,
         minimumTreeIndex: draggedMinimumTreeIndex,
-        expandParent: false,
+        expandParent: true,
         getNodeKey,
       });
 

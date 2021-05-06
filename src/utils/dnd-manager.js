@@ -52,7 +52,7 @@ export default class DndManager {
     return this.treeRef.props.maxDepth;
   }
 
-  getTargetDepth(dropTargetProps, monitor, component) {
+  getTargetDepth(dropTargetProps, monitor, component, minimumDropDepth) {
     let dropTargetDepth = 0;
 
     const rowAbove = dropTargetProps.getPrevRow();
@@ -113,6 +113,10 @@ export default class DndManager {
       );
     }
 
+    // BETTER DRAG for min depths
+    if (!aboveNodeCannotHaveChildren && targetDepth < minimumDropDepth) {
+      targetDepth = minimumDropDepth;
+    }
     return targetDepth;
   }
 
@@ -124,7 +128,12 @@ export default class DndManager {
     const rowAbove = dropTargetProps.getPrevRow();
     const abovePath = rowAbove ? rowAbove.path : [];
     const aboveNode = rowAbove ? rowAbove.node : {};
-    const targetDepth = this.getTargetDepth(dropTargetProps, monitor, null);
+    const targetDepth = this.getTargetDepth(
+      dropTargetProps,
+      monitor,
+      null,
+      this.minimumDropDepth
+    );
 
     // Cannot drop if we're adding to the children of the row above and
     //  the row above is a function
@@ -205,10 +214,13 @@ export default class DndManager {
   wrapTarget(el) {
     const nodeDropTarget = {
       drop: (dropTargetProps, monitor, component) => {
-        const depth = this.getTargetDepth(dropTargetProps, monitor, component);
-        if (depth < this.minimumDropDepth) {
-          return undefined;
-        }
+        const depth = this.getTargetDepth(
+          dropTargetProps,
+          monitor,
+          component,
+          this.minimumDropDepth
+        );
+
         const result = {
           node: monitor.getItem().node,
           path: monitor.getItem().path,
@@ -220,14 +232,15 @@ export default class DndManager {
 
         this.drop(result);
 
-        return { ...result, myMessage: 'HEJ HEEEJ' };
+        return result;
       },
 
       hover: (dropTargetProps, monitor, component) => {
         const targetDepth = this.getTargetDepth(
           dropTargetProps,
           monitor,
-          component
+          component,
+          this.minimumDropDepth
         );
         const draggedNode = monitor.getItem().node;
         const needsRedraw =
@@ -241,9 +254,6 @@ export default class DndManager {
           return;
         }
 
-        if (targetDepth < this.minimumDropDepth) {
-          return;
-        }
         // throttle `dragHover` work to available animation frames
         cancelAnimationFrame(this.rafId);
         this.rafId = requestAnimationFrame(() => {
