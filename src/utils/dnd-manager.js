@@ -54,11 +54,11 @@ export default class DndManager {
 
   getTargetDepth(dropTargetProps, monitor, component, minimumDropDepth) {
     let dropTargetDepth = 0;
-
+    let aboveNodeCannotHaveChildren = false;
     const rowAbove = dropTargetProps.getPrevRow();
     if (rowAbove) {
       let { path } = rowAbove;
-      const aboveNodeCannotHaveChildren = !this.treeRef.canNodeHaveChildren(
+      aboveNodeCannotHaveChildren = !this.treeRef.canNodeHaveChildren(
         rowAbove.node
       );
       if (aboveNodeCannotHaveChildren) {
@@ -121,9 +121,10 @@ export default class DndManager {
   }
 
   canDrop(dropTargetProps, monitor) {
-    if (!monitor.isOver()) {
-      return false;
-    }
+    // BETTER DRAG - investigate if this is needed
+    // if (!monitor.isOver()) {
+    //   return false;
+    // }
 
     const rowAbove = dropTargetProps.getPrevRow();
     const abovePath = rowAbove ? rowAbove.path : [];
